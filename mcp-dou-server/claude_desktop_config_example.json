@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "dou-server": {
+      "command": "C:\\Users\\94512868372\\Anaconda3\\envs\\pandas-course\\python.exe",
+      "args": [
+        "d:\\Git_Projects\\MCP\\mcp-dou-server\\run_server_standalone.py"
+      ],
+      "env": {
+        "PYTHONPATH": "d:\\Git_Projects\\MCP\\mcp-dou-server"
+      }
+    }
+  }
+}
