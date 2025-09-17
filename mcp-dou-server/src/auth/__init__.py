@@ -1,0 +1,1 @@
+"""Arquivo vazio para tornar auth um pacote Python."""
