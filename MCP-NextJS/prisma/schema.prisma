@@ -1,0 +1,79 @@
+// Configuração do gerador de cliente
+generator client {
+    provider      = "prisma-client-js"
+    // Otimizações para produção
+    binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+// Configuração da fonte de dados
+datasource db {
+    // Para desenvolvimento (SQLite)
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+
+    // Para produção (PostgreSQL)
+    // provider = "postgresql"
+    // url      = env("DATABASE_URL")
+}
+
+// ===================================
+// MODELOS DE DADOS
+// ===================================
+
+// Modelo principal: Bookmark
+model Bookmark {
+    // Identificador único
+    id String @id @default(uuid())
+
+    // Campos obrigatórios
+    url    String
+    title  String
+    userId String // ID do usuário do Clerk
+
+    // Campos opcionais
+    notes   String? // ? indica opcional
+    tags    String? // Tags separadas por vírgula
+    favicon String? // URL do favicon
+
+    // Timestamps automáticos
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relacionamento com categorias
+    categories BookmarkCategory[]
+
+    // Índices para performance
+    @@index([userId])
+    @@index([createdAt])
+    @@index([userId, createdAt])
+}
+
+// Modelo futuro: Categoria (exemplo)
+model Category {
+    id        String   @id @default(uuid())
+    name      String
+    color     String   @default("#0070f3")
+    userId    String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relacionamento com bookmarks
+    bookmarks BookmarkCategory[]
+
+    @@unique([userId, name])
+    @@index([userId])
+}
+
+// Tabela de relacionamento N:N
+model BookmarkCategory {
+    bookmarkId String
+    categoryId String
+    assignedAt DateTime @default(now())
+
+    bookmark Bookmark @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
+    category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+    @@id([bookmarkId, categoryId])
+    @@index([bookmarkId])
+    @@index([categoryId])
+}
