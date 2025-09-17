@@ -12,15 +12,18 @@ pydantic>=2.0.0
 # Configuration management
 python-dotenv>=1.0.0
 
-# XML processing
+# XML processing (essenciais para parser)
 lxml>=4.9.0
 beautifulsoup4>=4.12.0
 
-# Async file operations
+# Async file operations (essencial para parser assíncrono)
 aiofiles>=23.0.0
 
 # Rate limiting
 asyncio-throttle>=1.0.0
+
+# Search and indexing (para funcionalidades avançadas)
+whoosh>=2.7.4
 
 # Development dependencies (optional)
 pytest>=7.0.0
