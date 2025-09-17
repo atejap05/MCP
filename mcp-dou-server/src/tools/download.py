@@ -165,6 +165,9 @@ async def download_dou_file(
     # Determina caminho local
     file_path = get_local_file_path(base_date, section, file_format, config.cache_dir)
     
+    # Constrói URL (necessário mesmo para arquivos em cache)
+    download_url = build_download_url(base_date, section, file_format)
+    
     # Verifica se arquivo já existe e não deve forçar download
     if file_path.exists() and not force_download:
         logger.info(f"Arquivo já existe em cache: {file_path}")
@@ -175,12 +178,12 @@ async def download_dou_file(
             file_format=file_format,
             file_size=file_path.stat().st_size,
             file_path=str(file_path),
+            download_url=download_url,
             is_cached=True,
             last_modified=datetime.fromtimestamp(file_path.stat().st_mtime)
         )
     
-    # Constrói URL e faz download
-    download_url = build_download_url(base_date, section, file_format)
+    # Faz download
     headers = auth.get_session_headers()
     
     success = await download_file_from_url(
@@ -205,12 +208,15 @@ async def download_dou_file(
     else:
         # Retorna info mesmo se download falhou
         return DOUFileInfo(
-            filename=f"{base_date}-{section.value}.{file_format.value}",
+            filename=f"{base_date}-{section.value}.{file_format.value.lower()}",
             date=base_date,
             section=section,
             file_format=file_format,
+            file_size=None,
+            file_path=None,
             download_url=download_url,
-            is_cached=False
+            is_cached=False,
+            last_modified=None
         )
 
 
@@ -238,6 +244,8 @@ def register_download_tools(mcp: FastMCP) -> None:
             target_date = datetime.strptime(date_str, "%Y-%m-%d").date()
             
             # Processa seções
+            if sections is None:
+                sections = "DO1 DO2 DO3"
             section_list = [DOUSection(s.strip()) for s in sections.split()]
             
             # Autentica
@@ -315,6 +323,10 @@ def register_download_tools(mcp: FastMCP) -> None:
             
             # Mapeia seções PDF para enum
             section_map = {"do1": DOUSection.DO1, "do2": DOUSection.DO2, "do3": DOUSection.DO3}
+            
+            # Processa seções
+            if sections is None:
+                sections = "do1 do2 do3"
             
             try:
                 section_list = [section_map[s.strip().lower()] for s in sections.split()]
@@ -395,6 +407,9 @@ def register_download_tools(mcp: FastMCP) -> None:
             target_date = datetime.strptime(date_str, "%Y-%m-%d").date()
             format_enum = FileFormat.XML if file_format.lower() == "xml" else FileFormat.PDF
             
+            # Processa seções
+            if sections is None:
+                sections = "DO1 DO2 DO3"
             section_list = [DOUSection(s.strip()) for s in sections.split()]
             
             # Autentica
