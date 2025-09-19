@@ -33,6 +33,7 @@ O projeto segue uma arquitetura simplificada baseada no protocolo MCP, utilizand
 **Função**: Consulta os andamentos de um processo judicial específico.
 
 **Parâmetros**:
+
 - `numero_processo`: String - Número do processo no formato CNJ (ex: `1026220-43.2025.4.01.3600`)
 - `grau`: String - Grau do processo (`G1` ou `G2`, padrão: `G1`)
 
@@ -45,6 +46,7 @@ O projeto segue uma arquitetura simplificada baseada no protocolo MCP, utilizand
 **Função**: Busca processos por temas, assuntos ou palavras-chave.
 
 **Parâmetros**:
+
 - `filtro`: String - Palavra-chave ou tema para buscar
 
 **Retorno**: Orientação sobre implementação (atualmente placeholder).
@@ -56,9 +58,11 @@ O projeto segue uma arquitetura simplificada baseada no protocolo MCP, utilizand
 **Função**: Faz resumo e análise dos dados de um processo judicial.
 
 **Parâmetros**:
+
 - `dados_processo`: String - Dados do processo (geralmente saída de `consultar_processo`)
 
 **Retorno**: Análise estruturada incluindo:
+
 - Número total de andamentos
 - Análise temporal (primeiro/último andamento)
 - Tipos de andamento mais frequentes
@@ -146,6 +150,7 @@ A API DataJud do CNJ oferece vantagens significativas:
 - **Cobertura nacional**: Acesso a todos os tribunais brasileiros
 
 Para implementar:
+
 1. Obter credenciais da API DataJud
 2. Implementar autenticação OAuth2
 3. Desenvolver endpoints de busca e consulta
@@ -221,18 +226,21 @@ python test_mcp_tools.py
 ### Melhorias Planejadas
 
 #### Curto Prazo
+
 - **Cache Redis**: Implementar cache distribuído para melhor performance
 - **Múltiplos tribunais**: Adicionar suporte a outros TRFs
 - **Rate limiting**: Controle de frequência de requisições
 - **Retry logic**: Estratégia de tentativas para falhas temporárias
 
 #### Médio Prazo
+
 - **API DataJud**: Integração completa com API oficial do CNJ
 - **Busca avançada**: Filtros por data, juiz, vara, etc.
 - **Dados enriquecidos**: Extração de metadados completos (partes, valores)
 - **Interface web**: Dashboard administrativo para monitoramento
 
 #### Longo Prazo
+
 - **Machine Learning**: Análises preditivas de duração de processos
 - **Notificações**: Sistema de alertas para movimentações importantes
 - **API pública**: Exposição de dados agregados anonimizados
